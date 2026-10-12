@@ -1,0 +1,13 @@
+.chrome-temp*
+src_backup*
+docs
+*.py
+*.mjs
+*.bat
+*.log
+*.txt
+detailed_audit.json
+verify_*.js
+audit_*.js
+calc_*.js
+check_*.js

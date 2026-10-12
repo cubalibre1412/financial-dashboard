@@ -1,0 +1,67 @@
+{
+  "dataVersion": "3.1.2026-09-09_04-28-58",
+  "generatedAt": "2026-09-09T04:28:56.809Z",
+  "sourceFiles": {
+    "풀무원": {
+      "fileName": "풀무원_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 91107,
+      "modifiedAt": "2026-09-08T08:28:32.311Z",
+      "sha256": "79ed7651419a34ccfdcca43c729adab0b3976ac3c7a647bb82f1c0b6799acea6",
+      "rows": 11
+    },
+    "CJ제일제당": {
+      "fileName": "CJ제일제당_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 457515,
+      "modifiedAt": "2026-09-07T07:34:58.616Z",
+      "sha256": "1ff489da258009532694c665ee88d68b18e68da88b7a0a548e54ee07645b054c",
+      "rows": 11
+    },
+    "농심": {
+      "fileName": "농심_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 494443,
+      "modifiedAt": "2026-09-07T07:35:00.786Z",
+      "sha256": "ad6a39b20118425d5600741ba865053dd3f6c6248e6d841e3fd3e94ee8a387e6",
+      "rows": 11
+    },
+    "삼양식품": {
+      "fileName": "삼양식품_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 696886,
+      "modifiedAt": "2026-09-07T07:35:04.575Z",
+      "sha256": "8ccc81f914826f396b13404597b73491e2397976452b9331d6b1a9129fe03f0a",
+      "rows": 11
+    },
+    "대상": {
+      "fileName": "대상_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 382901,
+      "modifiedAt": "2026-09-07T07:35:02.662Z",
+      "sha256": "c9ae1a557f05f022a8792ee84cac7cf0610ae35018f5117002f5bd073af92562",
+      "rows": 11
+    },
+    "오뚜기": {
+      "fileName": "오뚜기_TSR_Valuation_2016_2026.xlsx",
+      "bytes": 253324,
+      "modifiedAt": "2026-09-07T07:35:05.965Z",
+      "sha256": "0aad5ea75625cb530b0b0b6cea94df2d4d76a7ff611973795b40e673a83f1748",
+      "rows": 11
+    },
+    "benchmarks": {
+      "fileName": "비교 지수 데이터.xlsx",
+      "bytes": 343204,
+      "modifiedAt": "2026-09-04T06:06:39.000Z",
+      "sha256": "a53417e3b0a768b193205592891311ac875bc22f7a67a077aad438215d8f5360",
+      "krxRows": 66,
+      "apartmentRows": 128
+    }
+  },
+  "validation": {
+    "status": "PASSED",
+    "companyCount": 6,
+    "companyRows": 66,
+    "krxRows": 66,
+    "apartmentRows": 128
+  },
+  "change": {
+    "changedRecords": 0,
+    "samples": []
+  }
+}

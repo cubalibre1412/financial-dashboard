@@ -1,0 +1,35 @@
+{
+  "baseURL": "http://127.0.0.1:5190/",
+  "checkedAt": "2026-09-08T09:41:51.612Z",
+  "checks": [
+    "16 inverse target re-evaluations",
+    "baseline match",
+    "invalid values",
+    "goal periods",
+    "save/load",
+    "scenario isolation",
+    "TTM/recovery presets",
+    "tab order",
+    "1440/1920/760/390 layout",
+    "A-D regression"
+  ],
+  "errors": [],
+  "baseline": {
+    "ebitda": 278440605811,
+    "nb": 628974104733,
+    "nd": 1522518676525,
+    "ev": 1870178019565,
+    "cap": 347659343040,
+    "price": 9120,
+    "tsr": -0.2873261205564142,
+    "effects": [
+      0.19119733568856387,
+      -0.3775822986173733,
+      -0.10882369240349317,
+      0.007882534775888718
+    ],
+    "shareEffect": 0,
+    "residual": -3.3306690738754696e-16,
+    "valid": true
+  }
+}
