@@ -85,12 +85,12 @@ function WealthIndexCard({ period, theme }) {
         backgroundColor: theme === 'dark' ? 'rgba(15, 23, 42, 0.95)' : 'rgba(255, 255, 255, 0.98)',
         titleColor: theme === 'dark' ? '#f8fafc' : '#0f172a', bodyColor: theme === 'dark' ? '#cbd5e1' : '#334155',
         borderColor: 'rgba(148, 163, 184, 0.35)', borderWidth: 1,
-        callbacks: { label: context => { const item = period.items[context.dataIndex]; return ['기간말 가치: ₩' + item.wealth.toFixed(1), '누적 수익률: ' + formatPercent(item.returnValue)]; } }
+        callbacks: { label: context => { const item = period.items[context.dataIndex]; return item.wealth == null ? ['데이터 없음'] : ['기간말 가치: ₩' + item.wealth.toFixed(1), '누적 수익률: ' + formatPercent(item.returnValue)]; } }
       }
     },
     scales: {
       x: { grid: { display: false }, ticks: { color: theme === 'dark' ? '#94a3b8' : '#64748b', font: { size: 10, weight: '600' } } },
-      y: { suggestedMin: Math.min(70, ...period.items.map(item => item.wealth - 5)), suggestedMax: Math.max(110, ...period.items.map(item => item.wealth + 5)), grid: { color: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.07)' }, ticks: { color: theme === 'dark' ? '#94a3b8' : '#64748b', callback: value => '₩' + value } }
+      y: { beginAtZero: true, suggestedMax: Math.max(110, ...period.items.filter(item => item.wealth != null).map(item => item.wealth + 5)), grid: { color: theme === 'dark' ? 'rgba(255,255,255,0.06)' : 'rgba(15,23,42,0.07)' }, ticks: { color: theme === 'dark' ? '#94a3b8' : '#64748b', callback: value => '₩' + value } }
     }
   };
   return (
@@ -98,7 +98,7 @@ function WealthIndexCard({ period, theme }) {
       <div className="wealth-index-card-header"><div><strong>{period.label}</strong><span>{period.range}</span></div><span className="wealth-index-base">원금 ₩100</span></div>
       <div className="wealth-index-chart"><Bar data={data} options={options} /></div>
       <div className="wealth-index-values">{period.items.map(item => (
-        <div className="wealth-index-row" key={item.label}><span><i style={{ background: item.color }} />{item.label}</span><b>₩{item.wealth.toFixed(0)}</b><em className={item.returnValue >= 0 ? 'color-pos' : 'color-neg'}>{formatPercent(item.returnValue)}</em></div>
+        <div className="wealth-index-row" key={item.label}><span><i style={{ background: item.color }} />{item.label}</span><b>{item.wealth == null ? '데이터 없음' : `₩${item.wealth.toFixed(0)}`}</b><em className={item.returnValue >= 0 ? 'color-pos' : 'color-neg'}>{formatPercent(item.returnValue)}</em></div>
       ))}</div>
     </article>
   );

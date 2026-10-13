@@ -31,6 +31,7 @@ export default function Header({
   onExportBackup,
   dataManifest,
   dashboardAudience,
+  hasWorkingEdits,
   onOpenBoardDashboard,
   onOpenWorkingDashboard
 }) {
@@ -51,12 +52,13 @@ export default function Header({
           <div>
             <div className="brand-title-group">
               <h1 className="brand-title">풀무원 이사회 대시보드</h1>
-              <span className="badge-pro">{isBoardAudience ? 'BOARD VIEW v7.0' : 'WORKING VIEW v6.0'}</span>
+              <span className="badge-pro">{isBoardAudience ? 'BOARD VIEW v8.0' : 'WORKING VIEW v8.0'}</span>
             </div>
             <p className="brand-subtitle">{isBoardAudience ? '공식 장기 성과 · 최신 핵심 KPI · 이사회 점검사항' : 'K-Food 피어그룹 6개사 TSR · 순차입금/Net Debt/EV · 벤치마크 지수 정밀 분석'}</p>
             <p className="brand-subtitle" title="원천 엑셀을 검증 후 추출한 데이터 패키지 기준입니다. 화면에서 업로드·편집한 값은 이 브라우저에만 저장되며 운영 기준값이 아닙니다.">
               {isBoardAudience ? '공식 성과 FY2016~FY2025 · 최신 모니터링 FY2026H1' : `데이터 패키지 ${dataManifest?.dataVersion ?? '확인 중'} · 갱신 ${dataManifest?.generatedAt ? new Date(dataManifest.generatedAt).toLocaleString('ko-KR') : '확인 중'}`}
             </p>
+            {!isBoardAudience && <span className={`working-data-status ${hasWorkingEdits ? 'draft' : ''}`}>{hasWorkingEdits ? '개인 작업본 · 이 브라우저에만 저장 · 이사회 기준값에 미반영' : '승인 데이터 조회 · 편집 시 개인 작업본으로 저장'}</span>}
           </div>
         </div>
 
@@ -87,7 +89,7 @@ export default function Header({
           </button>
           </>}
 
-          <label className="btn btn-secondary btn-file" id="btn-import-excel" title="엑셀 파일 업로드 (전체 데이터 시트)">
+          {!isBoardAudience && <label className="btn btn-secondary btn-file" id="btn-import-excel" title="엑셀 파일 업로드 (전체 데이터 시트)">
             <Upload size={18} />
             <span>엑셀 업로드</span>
             <input 
@@ -96,9 +98,9 @@ export default function Header({
               style={{ display: 'none' }} 
               onChange={onImportExcel}
             />
-          </label>
+          </label>}
 
-          <button 
+          {!isBoardAudience && <button 
             className="btn btn-secondary"
             onClick={onExportBackup}
             title="현재 사용자 저장 데이터 전체 백업 파일(.json) 내보내기"
@@ -106,7 +108,7 @@ export default function Header({
           >
             <DatabaseBackup size={18} />
             <span>데이터 백업</span>
-          </button>
+          </button>}
 
           <button 
             className="btn-icon" 
@@ -119,7 +121,7 @@ export default function Header({
         </div>
       </div>
 
-      <div className="header-nav-row">
+      {!isBoardAudience && <div className="header-nav-row">
         {/* Navigation Tabs */}
         <div className="company-tabs">
           {isBoardAudience && (
@@ -199,7 +201,7 @@ export default function Header({
             })}
           </div>
         )}
-      </div>
+      </div>}
     </header>
   );
 }

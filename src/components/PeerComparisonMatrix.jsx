@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Layers, ArrowUpDown, Sparkles } from 'lucide-react';
 import { 
   formatKRW, formatPercent, formatMultiple, formatPeriodLabel, 
-  calculatePeriodReturns, getMarketCap, getNetDebtBroad, getNetBorrowing, safeNum
+  calculatePeriodReturns, getMarketCap, getNetDebtBroad, getNetBorrowing, safeNum, periodKey
 } from '../utils/financialCalculators';
 
 export default function PeerComparisonMatrix({ 
@@ -57,6 +57,7 @@ export default function PeerComparisonMatrix({
       ebitda,
       evEbitda,
       per,
+      effectiveNetIncome: safeNum(periodKey(latest['연도']) === '2026H1' ? latest['2026H1 TTM 지배주주순이익(원)'] : latest['순이익(원)']),
       pbr,
       roe
     };
@@ -167,7 +168,7 @@ export default function PeerComparisonMatrix({
           <tbody>
             {sortedRows.map((r) => {
               const isPulmuone = r.name === '풀무원';
-              const isDeficit = r.per === null;
+              const isDeficit = r.effectiveNetIncome !== null && r.effectiveNetIncome < 0;
               return (
                 <tr 
                   key={r.name} 
@@ -214,7 +215,7 @@ export default function PeerComparisonMatrix({
                     {isDeficit ? (
                       <span className="text-danger font-semibold" title="TTM 지배주주순이익 적자">N/M (적자)</span>
                     ) : (
-                      r.per > 0 ? `${r.per.toFixed(1)}배` : '—'
+                      r.per > 0 ? `${r.per.toFixed(1)}배` : r.effectiveNetIncome === null ? '데이터 없음' : '계산 불가'
                     )}
                   </td>
                   <td className="text-right tabular-nums">
@@ -244,7 +245,7 @@ export default function PeerComparisonMatrix({
               <td className="text-right tabular-nums">{formatMultiple(calcStats('evEbitda').avg)}</td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('nbToEbitda').avg)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('ebitdaGrowth').avg)}</td>
-              <td className="text-right tabular-nums">{formatMultiple(calcStats('per').avg)}</td>
+              <td className="text-right tabular-nums" title="적자·순이익 0·결측 기업은 PER 통계에서 제외">{formatMultiple(calcStats('per').avg)} <small>({calcStats('per').count}/5사)</small></td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('pbr').avg, 2)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('roe').avg)}</td>
             </tr>
@@ -264,7 +265,7 @@ export default function PeerComparisonMatrix({
               <td className="text-right tabular-nums">{formatMultiple(calcStats('evEbitda').median)}</td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('nbToEbitda').median)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('ebitdaGrowth').median)}</td>
-              <td className="text-right tabular-nums">{formatMultiple(calcStats('per').median)}</td>
+              <td className="text-right tabular-nums" title="적자·순이익 0·결측 기업은 PER 통계에서 제외">{formatMultiple(calcStats('per').median)} <small>({calcStats('per').count}/5사)</small></td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('pbr').median, 2)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('roe').median)}</td>
             </tr>
@@ -284,7 +285,7 @@ export default function PeerComparisonMatrix({
               <td className="text-right tabular-nums">{formatMultiple(calcStats('evEbitda', true).median)}</td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('nbToEbitda', true).median)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('ebitdaGrowth', true).median)}</td>
-              <td className="text-right tabular-nums">{formatMultiple(calcStats('per', true).median)}</td>
+              <td className="text-right tabular-nums" title="적자·순이익 0·결측 기업은 PER 통계에서 제외">{formatMultiple(calcStats('per', true).median)} <small>({calcStats('per', true).count}/4사)</small></td>
               <td className="text-right tabular-nums">{formatMultiple(calcStats('pbr', true).median, 2)}</td>
               <td className="text-right tabular-nums">{formatPercent(calcStats('roe', true).median)}</td>
             </tr>

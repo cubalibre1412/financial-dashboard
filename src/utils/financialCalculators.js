@@ -165,8 +165,9 @@ export function recalculateRecord(record) {
   // 1. 주가 및 TSR
   const begP = safeNum(updated['기초주가']);
   const endP = safeNum(updated['기말주가']);
-  const dps = safeNum(updated['DPS']) ?? 0;
-  if (begP !== null && endP !== null && begP > 0) {
+  const dps = safeNum(updated['DPS']);
+  updated['연간 TSR'] = null;
+  if (begP !== null && endP !== null && dps !== null && begP > 0) {
     updated['연간 TSR'] = (endP - begP + dps) / begP;
   }
 
@@ -186,6 +187,8 @@ export function recalculateRecord(record) {
   const lease = safeNum(updated['리스부채(원)']);
   const hybrid = safeNum(updated['신종자본증권(원)']);
   const nonCont = safeNum(updated['비지배지분(원)']);
+  updated['Net Debt(B)'] = null;
+  if (updated['Net Debt'] !== undefined) updated['Net Debt'] = null;
   if (nb !== null) {
     const calcNd = nb + (lease ?? 0) + (hybrid ?? 0) + (nonCont ?? 0);
     updated['Net Debt(B)'] = calcNd;
@@ -197,6 +200,7 @@ export function recalculateRecord(record) {
   // 4. EV = 시가총액 + Net Debt
   const mcap = getMarketCap(updated);
   const nd = getNetDebtBroad(updated);
+  updated['EV(원)'] = null;
   if (mcap !== null && nd !== null) {
     updated['EV(원)'] = mcap + nd;
   }
@@ -206,6 +210,7 @@ export function recalculateRecord(record) {
   const depr = safeNum(updated['감가상각비(원)']) ?? safeNum(updated['감가상각비(유형+사용권)(원)']) ?? safeNum(updated['감가상각비']);
   const invDepr = safeNum(updated['투자부동산감가상각비(원)']);
   const intAmort = safeNum(updated['무형자산상각비(원)']);
+  updated['EBITDA(원)'] = null;
   if (ebit !== null) {
     updated['EBITDA(원)'] = ebit + (depr ?? 0) + (invDepr ?? 0) + (intAmort ?? 0);
   }
@@ -216,7 +221,7 @@ export function recalculateRecord(record) {
   const netInc = safeNum(updated['순이익(원)']) ?? safeNum(updated['당기순이익(원)']);
   const equity = safeNum(updated['자기자본(원)']);
 
-  const is2026H1 = String(updated['연도']).includes('2026');
+  const is2026H1 = periodKey(updated['연도']) === '2026H1';
   const ttmEbitda = safeNum(updated['2026H1 TTM EBITDA(원)']);
   const ttmNetInc = safeNum(updated['2026H1 TTM 지배주주순이익(원)']);
 
@@ -228,11 +233,14 @@ export function recalculateRecord(record) {
   // 순이익 적자 시 PER는 null (N/M 적자로 화면 표시)
   updated['PER'] = (effectiveNetInc !== null && effectiveNetInc < 0) ? null : mult.per;
   updated['PBR'] = mult.pbr;
-  if (mult.roe !== null) {
-    updated['ROE'] = mult.roe / 100;
-  }
+  // ROE uses period-attributed income / approved average equity, NOT PER's TTM income.
+  const averageEquity = safeNum(updated['평균자기자본(원)']);
+  updated['ROE'] = netInc !== null && averageEquity !== null && averageEquity !== 0
+    ? netInc / averageEquity : null;
 
   // 7. v2.3 신규 지표: 주가수익률, DPS 보정 효과, 순차입금/EBITDA
+  updated['주가수익률(가격 기준)'] = null;
+  updated['DPS 기반 TSR 보정 효과'] = null;
   if (begP !== null && endP !== null && begP > 0) {
     const priceRet = (endP - begP) / begP;
     updated['주가수익률(가격 기준)'] = priceRet;
@@ -243,6 +251,7 @@ export function recalculateRecord(record) {
   }
 
   const calcNb = safeNum(updated['순차입금(원)']);
+  updated['순차입금/EBITDA (2026H1: TTM)'] = null;
   if (calcNb !== null && effectiveEbitda !== null && effectiveEbitda > 0) {
     updated['순차입금/EBITDA (2026H1: TTM)'] = calcNb / effectiveEbitda;
   } else if (effectiveEbitda !== null && effectiveEbitda <= 0) {
@@ -636,4 +645,15 @@ export const PEER_NAMES = ['CJ제일제당','농심','삼양식품','대상','�
 export function peerMedian(values) {
   const a=values.map(safeNum).filter(v=>v!==null).sort((a,b)=>a-b);
   return a.length ? (a[Math.floor((a.length-1)/2)]+a[Math.floor(a.length/2)])/2 : null;
+}
+
+export function findPeriodRecord(records, selectedPeriod) {
+  return (records || []).find(row => periodKey(row['연도']) === periodKey(selectedPeriod)) ?? null;
+}
+
+export function peerMultipleSummary(companies, excludedCompany, selectedPeriod) {
+  const population = Object.entries(companies || {}).filter(([name]) => name !== excludedCompany);
+  const values = population.map(([, rows]) => safeNum(findPeriodRecord(rows, selectedPeriod)?.['EV/EBITDA']))
+    .filter(value => value !== null && value > 0);
+  return { evEbitda: peerMedian(values), count: values.length, total: population.length };
 }

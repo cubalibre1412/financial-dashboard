@@ -13,7 +13,7 @@ import BoardDashboard from './components/BoardDashboard';
 import { MASTER_DATA } from './data/masterData';
 import { DATA_MANIFEST } from './data/dataManifest';
 import { exportToExcel, exportBenchmarkToExcel, parseUploadedFile, exportAllDataBackup } from './utils/excelIO';
-import { formatPercent, validateAllData, recalculateTimeSeries, getPeriodKind } from './utils/financialCalculators';
+import { formatPercent, validateAllData, recalculateTimeSeries, getPeriodKind, peerMultipleSummary } from './utils/financialCalculators';
 import { CheckCircle2, AlertCircle, LineChart, ArrowRight } from 'lucide-react';
 import './App.css';
 
@@ -331,6 +331,7 @@ export default function App() {
         onExportBackup={handleExportBackup}
         dataManifest={DATA_MANIFEST}
         dashboardAudience={dashboardAudience}
+        hasWorkingEdits={JSON.stringify(companiesData) !== JSON.stringify(MASTER_DATA.companies)}
         onOpenBoardDashboard={openBoardDashboard}
         onOpenWorkingDashboard={openWorkingDashboard}
       />
@@ -339,9 +340,10 @@ export default function App() {
         {/* v7 Board View: official board reporting is intentionally separated from working tools. */}
         {dashboardAudience === 'board' && viewMode === 'company' && (
           <BoardDashboard
-            records={companiesData['풀무원'] || []}
-            allCompaniesData={companiesData}
+            records={MASTER_DATA.companies['풀무원'] || []}
+            allCompaniesData={MASTER_DATA.companies}
             benchmarkData={benchmarkData}
+            dataManifest={DATA_MANIFEST}
             onOpenWorkingDashboard={openWorkingDashboard}
             onOpenBenchmarks={() => openWorkingDashboard('benchmarks')}
             onOpenPeerComparison={() => openWorkingDashboard('peer_comparison')}
@@ -428,7 +430,7 @@ export default function App() {
               currentRecord={latestRecord}
               prevRecord={prevRecord}
               allRecords={rawRecords}
-              peerAvg={{ evEbitda: 8.8 }}
+              peerAvg={peerMultipleSummary(companiesData, selectedCompany, latestRecord?.['연도'])}
             />
 
             {/* Enterprise Value & Multiple Breakdown */}

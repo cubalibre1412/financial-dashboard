@@ -2519,6 +2519,20 @@
 
 /* v7 Board View: concise, decision-first board reporting surface. */
 .board-v7 { display:grid; gap:1rem; max-width:1280px; margin:0 auto; }
+.board-v8 .board-v7-section-heading h2 { margin:0; font-size:1.25rem; }
+.board-period-control { display:flex; align-items:center; gap:.5rem; flex-wrap:wrap; }
+.board-period-control label { font-size:.8rem; color:var(--text-secondary); }
+.board-period-control select { padding:.5rem; max-width:100%; border:1px solid var(--border-subtle); border-radius:8px; background:var(--bg-input); color:var(--text-primary); }
+.board-market-values { display:grid; gap:.45rem; margin:.8rem 0; font-size:1.2rem; }
+.board-v8 .board-v7-agenda-grid small { display:block; line-height:1.6; color:var(--text-secondary); }
+.working-data-status { display:inline-block; margin-top:.3rem; font-size:.75rem; color:var(--text-secondary); }
+.working-data-status.draft { color:#986318; font-weight:700; }
+@media screen { .info-print-note { display:none!important; } }
+.board-v8 .board-v7-section-heading .info-tooltip-wrap { display:inline-flex; flex:none; }
+.board-v8 .board-v7-section-heading > div:first-child { min-width:0; }
+.board-v8 .board-period-control { justify-content:flex-end; }
+.board-v8 .board-period-control label { white-space:nowrap; }
+@media (max-width:700px) { .board-v8 .board-period-control { justify-content:flex-start; width:100%; } }
 .board-v7-hero { display:flex; align-items:center; justify-content:space-between; gap:1.25rem; padding:1.35rem 1.5rem; border-left:4px solid var(--pulmuone-green); }
 .board-v7-eyebrow { display:block; margin-bottom:.3rem; color:var(--pulmuone-green); font-size:.68rem; letter-spacing:.09em; font-weight:800; }
 .board-v7-hero h2 { margin:0; color:var(--text-primary); font-size:1.45rem; }

@@ -11,7 +11,7 @@ import {
 import { 
   formatKRW, formatPercent, formatMultiple, formatPeriodLabel,
   getNetDebtBroad, getNetBorrowing, getMarketCap, calculatePeriodReturns,
-  isNetCash, safeNum, formatWonPerShare
+  isNetCash, safeNum, formatWonPerShare, periodKey
 } from '../utils/financialCalculators';
 
 export default function KpiCards({ 
@@ -23,7 +23,7 @@ export default function KpiCards({
 }) {
   if (!currentRecord) return null;
 
-  const is2026H1 = String(currentRecord['연도'] || '').includes('2026');
+  const is2026H1 = periodKey(currentRecord['연도']) === '2026H1';
 
   // TSR calculations
   const currentTSR = safeNum(currentRecord['연간 TSR']);
@@ -155,6 +155,10 @@ export default function KpiCards({
           <span className="tabular-nums font-semibold text-primary">
             {formatKRW(evVal)}
           </span>
+        </div>
+        <div className="kpi-sub-row">
+          <span className="kpi-sub-label">피어 중앙값 ({peerAvg?.count ?? 0}/{peerAvg?.total ?? 0}사):</span>
+          <span>{peerAvgEvEbitda == null || evEbitda == null ? '비교 불가' : `${formatMultiple(peerAvgEvEbitda)} · ${isUndervalued ? '대비 낮음' : evEbitda === peerAvgEvEbitda ? '동일' : '대비 높음'}`}</span>
         </div>
         <div className="kpi-sub-row">
           <span className="kpi-sub-label" title={is2026H1 ? "2026H1 반기 누적 실적이며 연환산 아님" : "연간 EBITDA"}>
