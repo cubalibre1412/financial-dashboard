@@ -53,7 +53,7 @@ export default function Header({
             <div className="brand-title-group">
               <h1 className="brand-title">풀무원 재무 분석 대시보드</h1>
               <span className="audience-tag">
-                {isBoardAudience ? 'BOARD VIEW v8.0' : 'WORKING VIEW v8.0'}
+                {isBoardAudience ? 'BOARD VIEW v9.0' : 'WORKING VIEW v8.0'}
               </span>
             </div>
             <p className="brand-subtitle">
