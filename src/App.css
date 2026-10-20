@@ -68,20 +68,33 @@
   color: var(--text-primary);
 }
 
-.badge-pro {
-  font-size: 0.65rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
+.badge-pro, .audience-tag {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  letter-spacing: 0.05em;
   padding: 2px 8px;
-  border-radius: var(--radius-full);
+  border-radius: var(--radius-sm);
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--color-positive);
+  border: 1px solid rgba(5, 150, 105, 0.25);
+  display: inline-block;
+}
+
+[data-theme="dark"] .badge-pro, [data-theme="dark"] .audience-tag {
   background: rgba(16, 185, 129, 0.15);
   color: var(--pulmuone-green);
-  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-color: rgba(16, 185, 129, 0.3);
 }
 
 .brand-subtitle {
   font-size: 0.85rem;
   color: var(--text-secondary);
+}
+
+.brand-subtitle.meta-note {
+  font-size: 0.75rem;
+  color: var(--text-muted);
 }
 
 .header-actions {

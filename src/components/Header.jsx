@@ -52,7 +52,7 @@ export default function Header({
           <div>
             <div className="brand-title-group">
               <h1 className="brand-title">풀무원 재무 분석 대시보드</h1>
-              <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20 px-2 py-0.5 rounded">
+              <span className="audience-tag">
                 {isBoardAudience ? 'BOARD VIEW v8.0' : 'WORKING VIEW v8.0'}
               </span>
             </div>
@@ -61,13 +61,13 @@ export default function Header({
                 ? '공식 장기 성과 · 최신 핵심 KPI · 이사회 점검사항' 
                 : 'K-Food 피어그룹 6개사 TSR · 순차입금/Net Debt/EV · 벤치마크 지수 정밀 분석'}
             </p>
-            <p className="brand-subtitle text-xs text-slate-500" title="원천 엑셀을 검증 후 추출한 데이터 패키지 기준입니다.">
+            <p className="brand-subtitle meta-note" title="원천 엑셀을 검증 후 추출한 데이터 패키지 기준입니다.">
               {isBoardAudience 
                 ? '공식 성과 FY2016~FY2025 · 최신 모니터링 FY2026H1' 
                 : `데이터 패키지 ${dataManifest?.dataVersion ?? '확인 중'} · 갱신 ${dataManifest?.generatedAt ? new Date(dataManifest.generatedAt).toLocaleString('ko-KR') : '확인 중'}`}
             </p>
             {!isBoardAudience && (
-              <span className={`text-[11px] font-mono mt-0.5 block ${hasWorkingEdits ? 'text-amber-400' : 'text-slate-400'}`}>
+              <span className={`working-data-status ${hasWorkingEdits ? 'draft' : ''}`}>
                 {hasWorkingEdits 
                   ? '● 개인 작업본 (이 브라우저에만 저장 · 이사회 기준값 미반영)' 
                   : '○ 승인 데이터 조회 모드'}
@@ -166,9 +166,9 @@ export default function Header({
                 onClick={() => setViewMode('benchmarks')}
                 id="tab-benchmarks"
               >
-                <LineChart size={15} className="text-sky-400" />
-                <span className="font-semibold">비교 지수 & 벤치마크</span>
-                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 ml-1">지수</span>
+                <LineChart size={15} className="accent-blue" />
+                <span className="font-bold">비교 지수 & 벤치마크</span>
+                <span className="tab-pill">지수</span>
               </button>
             )}
 
@@ -199,9 +199,9 @@ export default function Header({
                   }}
                   id={`tab-${comp}`}
                 >
-                  {isPulmuone ? <Sparkles size={13} className="text-emerald-400" /> : <Building2 size={15} />}
+                  {isPulmuone ? <Sparkles size={13} className="sparkle-icon" /> : <Building2 size={15} />}
                   <span>{comp}</span>
-                  {isPulmuone && <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 ml-1">본사</span>}
+                  {isPulmuone && <span className="tab-pill">본사</span>}
                 </button>
               );
             })}
@@ -210,8 +210,8 @@ export default function Header({
           {/* Period Filter Selector */}
           {!isBoardAudience && viewMode === 'company' && (
             <div className="period-pill-selector">
-              <Calendar size={14} className="text-slate-400" />
-              <span className="text-xs text-slate-400 font-medium mr-1">기간 구분:</span>
+              <Calendar size={14} className="calendar-icon" />
+              <span className="period-label">기간 구분:</span>
               {['ALL', 'ANNUAL', 'HALF', 'QUARTER'].map((p) => {
                 const labelMap = {
                   ALL: '전체',
