@@ -47,68 +47,92 @@ export default function Header({
       <div className="header-top-row">
         <div className="brand-section">
           <div className="brand-icon-wrapper">
-            <TrendingUp className="brand-icon" size={24} />
+            <TrendingUp className="brand-icon" size={22} />
           </div>
           <div>
             <div className="brand-title-group">
-              <h1 className="brand-title">풀무원 이사회 대시보드</h1>
-              <span className="badge-pro">{isBoardAudience ? 'BOARD VIEW v8.0' : 'WORKING VIEW v8.0'}</span>
+              <h1 className="brand-title">풀무원 재무 분석 대시보드</h1>
+              <span className="text-xs font-mono font-semibold text-emerald-700 bg-emerald-50 border border-emerald-200 dark:text-emerald-400 dark:bg-emerald-500/10 dark:border-emerald-500/20 px-2 py-0.5 rounded">
+                {isBoardAudience ? 'BOARD VIEW v8.0' : 'WORKING VIEW v8.0'}
+              </span>
             </div>
-            <p className="brand-subtitle">{isBoardAudience ? '공식 장기 성과 · 최신 핵심 KPI · 이사회 점검사항' : 'K-Food 피어그룹 6개사 TSR · 순차입금/Net Debt/EV · 벤치마크 지수 정밀 분석'}</p>
-            <p className="brand-subtitle" title="원천 엑셀을 검증 후 추출한 데이터 패키지 기준입니다. 화면에서 업로드·편집한 값은 이 브라우저에만 저장되며 운영 기준값이 아닙니다.">
-              {isBoardAudience ? '공식 성과 FY2016~FY2025 · 최신 모니터링 FY2026H1' : `데이터 패키지 ${dataManifest?.dataVersion ?? '확인 중'} · 갱신 ${dataManifest?.generatedAt ? new Date(dataManifest.generatedAt).toLocaleString('ko-KR') : '확인 중'}`}
+            <p className="brand-subtitle">
+              {isBoardAudience 
+                ? '공식 장기 성과 · 최신 핵심 KPI · 이사회 점검사항' 
+                : 'K-Food 피어그룹 6개사 TSR · 순차입금/Net Debt/EV · 벤치마크 지수 정밀 분석'}
             </p>
-            {!isBoardAudience && <span className={`working-data-status ${hasWorkingEdits ? 'draft' : ''}`}>{hasWorkingEdits ? '개인 작업본 · 이 브라우저에만 저장 · 이사회 기준값에 미반영' : '승인 데이터 조회 · 편집 시 개인 작업본으로 저장'}</span>}
+            <p className="brand-subtitle text-xs text-slate-500" title="원천 엑셀을 검증 후 추출한 데이터 패키지 기준입니다.">
+              {isBoardAudience 
+                ? '공식 성과 FY2016~FY2025 · 최신 모니터링 FY2026H1' 
+                : `데이터 패키지 ${dataManifest?.dataVersion ?? '확인 중'} · 갱신 ${dataManifest?.generatedAt ? new Date(dataManifest.generatedAt).toLocaleString('ko-KR') : '확인 중'}`}
+            </p>
+            {!isBoardAudience && (
+              <span className={`text-[11px] font-mono mt-0.5 block ${hasWorkingEdits ? 'text-amber-400' : 'text-slate-400'}`}>
+                {hasWorkingEdits 
+                  ? '● 개인 작업본 (이 브라우저에만 저장 · 이사회 기준값 미반영)' 
+                  : '○ 승인 데이터 조회 모드'}
+              </span>
+            )}
           </div>
         </div>
 
         <div className="header-actions">
-          <button className="btn btn-primary" onClick={isBoardAudience ? onOpenWorkingDashboard : onOpenBoardDashboard} id="btn-dashboard-audience-switch">
-            {isBoardAudience ? <Building2 size={18} /> : <Sparkles size={18} />}
+          <button 
+            className="btn btn-primary" 
+            onClick={isBoardAudience ? onOpenWorkingDashboard : onOpenBoardDashboard} 
+            id="btn-dashboard-audience-switch"
+          >
+            {isBoardAudience ? <Building2 size={16} /> : <Sparkles size={16} />}
             <span>{isBoardAudience ? '실무자용 대시보드' : '이사회용 대시보드'}</span>
           </button>
 
-          {!isBoardAudience && <>
-          <button 
-            className="btn btn-primary"
-            onClick={onOpenAddModal}
-            id="btn-add-data"
-          >
-            <PlusCircle size={18} />
-            <span>신규 실적 등록 / 업데이트</span>
-          </button>
+          {!isBoardAudience && (
+            <>
+              <button 
+                className="btn btn-primary"
+                onClick={onOpenAddModal}
+                id="btn-add-data"
+              >
+                <PlusCircle size={16} />
+                <span>실적 등록/업데이트</span>
+              </button>
 
-          <button 
-            className="btn btn-secondary"
-            onClick={isBenchmarkView ? onExportBenchmark : onExportExcel}
-            title={downloadTitle}
-            id="btn-export-excel"
-          >
-            <Download size={18} />
-            <span>{downloadLabel}</span>
-          </button>
-          </>}
+              <button 
+                className="btn btn-secondary"
+                onClick={isBenchmarkView ? onExportBenchmark : onExportExcel}
+                title={downloadTitle}
+                id="btn-export-excel"
+              >
+                <Download size={16} />
+                <span>{downloadLabel}</span>
+              </button>
+            </>
+          )}
 
-          {!isBoardAudience && <label className="btn btn-secondary btn-file" id="btn-import-excel" title="엑셀 파일 업로드 (전체 데이터 시트)">
-            <Upload size={18} />
-            <span>엑셀 업로드</span>
-            <input 
-              type="file" 
-              accept=".xlsx, .xls, .csv" 
-              style={{ display: 'none' }} 
-              onChange={onImportExcel}
-            />
-          </label>}
+          {!isBoardAudience && (
+            <label className="btn btn-secondary btn-file" id="btn-import-excel" title="엑셀 파일 업로드 (전체 데이터 시트)">
+              <Upload size={16} />
+              <span>엑셀 업로드</span>
+              <input 
+                type="file" 
+                accept=".xlsx, .xls, .csv" 
+                style={{ display: 'none' }} 
+                onChange={onImportExcel}
+              />
+            </label>
+          )}
 
-          {!isBoardAudience && <button 
-            className="btn btn-secondary"
-            onClick={onExportBackup}
-            title="현재 사용자 저장 데이터 전체 백업 파일(.json) 내보내기"
-            id="btn-export-backup"
-          >
-            <DatabaseBackup size={18} />
-            <span>데이터 백업</span>
-          </button>}
+          {!isBoardAudience && (
+            <button 
+              className="btn btn-secondary"
+              onClick={onExportBackup}
+              title="현재 사용자 저장 데이터 전체 백업 파일(.json) 내보내기"
+              id="btn-export-backup"
+            >
+              <DatabaseBackup size={16} />
+              <span>데이터 백업</span>
+            </button>
+          )}
 
           <button 
             className="btn-icon" 
@@ -116,93 +140,100 @@ export default function Header({
             title={theme === 'dark' ? '라이트 모드로 전환' : '다크 모드로 전환'}
             id="btn-theme-toggle"
           >
-            {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+            {theme === 'dark' ? <Sun size={18} /> : <Moon size={18} />}
           </button>
         </div>
       </div>
 
-      {!isBoardAudience && <div className="header-nav-row">
-        {/* Navigation Tabs */}
-        <div className="company-tabs">
-          {isBoardAudience && (
-            <button className={`company-tab ${viewMode === 'company' ? 'active pulmuone-tab' : ''}`} onClick={onOpenBoardDashboard} id="tab-board-summary">
-              <Sparkles size={15} className="sparkle-icon" />
-              <span>이사회 요약</span>
-            </button>
-          )}
-          {/* Detailed comparison pages belong to the working dashboard, not Board View. */}
-          {!isBoardAudience && <button 
-            className={`company-tab ${viewMode === 'benchmarks' ? 'active benchmark-active' : ''}`}
-            onClick={() => setViewMode('benchmarks')}
-            id="tab-benchmarks"
-          >
-            <LineChart size={16} className="accent-blue" />
-            <span className="font-bold">📊 비교 지수 & 벤치마크</span>
-            <span className="tab-pill" style={{ background: '#38bdf8' }}>지수</span>
-          </button>}
-
-          {/* 2. Peer 6 Comparison Tab */}
-          {!isBoardAudience && <button 
-            className={`company-tab ${viewMode === 'peer_comparison' ? 'active' : ''}`}
-            onClick={() => setViewMode('peer_comparison')}
-            id="tab-peer-compare"
-          >
-            <Layers size={16} />
-            <span>피어 6개사 종합 비교</span>
-          </button>}
-
-          {!isBoardAudience && <div className="tabs-divider" />}
-
-          {/* 3. Individual Companies */}
-          {!isBoardAudience && companies.map((comp) => {
-            const isSelected = viewMode === 'company' && selectedCompany === comp;
-            const isPulmuone = comp === '풀무원';
-            return (
-              <button
-                key={comp}
-                className={`company-tab ${isSelected ? 'active' : ''} ${isPulmuone ? 'pulmuone-tab' : ''}`}
-                onClick={() => {
-                  setViewMode('company');
-                  setSelectedCompany(comp);
-                }}
-                id={`tab-${comp}`}
+      {!isBoardAudience && (
+        <div className="header-nav-row">
+          {/* Navigation Tabs */}
+          <div className="company-tabs">
+            {isBoardAudience && (
+              <button 
+                className={`company-tab ${viewMode === 'company' ? 'active pulmuone-tab' : ''}`} 
+                onClick={onOpenBoardDashboard} 
+                id="tab-board-summary"
               >
-                {isPulmuone && <Sparkles size={14} className="sparkle-icon" />}
-                <Building2 size={16} />
-                <span>{comp}</span>
-                {isPulmuone && <span className="tab-pill">본사</span>}
+                <Sparkles size={14} className="sparkle-icon" />
+                <span>이사회 요약</span>
               </button>
-            );
-          })}
-        </div>
+            )}
 
-        {/* Period Filter Selector */}
-        {!isBoardAudience && viewMode === 'company' && (
-          <div className="period-pill-selector">
-            <Calendar size={15} className="calendar-icon" />
-            <span className="period-label">기간 구분:</span>
-            {['ALL', 'ANNUAL', 'HALF', 'QUARTER'].map((p) => {
-              const labelMap = {
-                ALL: '전체',
-                ANNUAL: '연간 (FY)',
-                HALF: '반기 (1H/2H)',
-                QUARTER: '분기 (Q)'
-              };
+            {!isBoardAudience && (
+              <button 
+                className={`company-tab ${viewMode === 'benchmarks' ? 'active benchmark-active' : ''}`}
+                onClick={() => setViewMode('benchmarks')}
+                id="tab-benchmarks"
+              >
+                <LineChart size={15} className="text-sky-400" />
+                <span className="font-semibold">비교 지수 & 벤치마크</span>
+                <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-300 ml-1">지수</span>
+              </button>
+            )}
+
+            {!isBoardAudience && (
+              <button 
+                className={`company-tab ${viewMode === 'peer_comparison' ? 'active' : ''}`}
+                onClick={() => setViewMode('peer_comparison')}
+                id="tab-peer-compare"
+              >
+                <Layers size={15} />
+                <span>피어 6개사 종합 비교</span>
+              </button>
+            )}
+
+            {!isBoardAudience && <div className="tabs-divider" />}
+
+            {/* Individual Companies */}
+            {!isBoardAudience && companies.map((comp) => {
+              const isSelected = viewMode === 'company' && selectedCompany === comp;
+              const isPulmuone = comp === '풀무원';
               return (
                 <button
-                  key={p}
-                  className={`period-btn ${periodType === p ? 'active' : ''}`}
-                  onClick={() => setPeriodType(p)}
-                  id={`period-btn-${p.toLowerCase()}`}
+                  key={comp}
+                  className={`company-tab ${isSelected ? 'active' : ''} ${isPulmuone ? 'pulmuone-tab' : ''}`}
+                  onClick={() => {
+                    setViewMode('company');
+                    setSelectedCompany(comp);
+                  }}
+                  id={`tab-${comp}`}
                 >
-                  {labelMap[p]}
+                  {isPulmuone ? <Sparkles size={13} className="text-emerald-400" /> : <Building2 size={15} />}
+                  <span>{comp}</span>
+                  {isPulmuone && <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-emerald-500/20 text-emerald-300 ml-1">본사</span>}
                 </button>
               );
             })}
           </div>
-        )}
-      </div>}
+
+          {/* Period Filter Selector */}
+          {!isBoardAudience && viewMode === 'company' && (
+            <div className="period-pill-selector">
+              <Calendar size={14} className="text-slate-400" />
+              <span className="text-xs text-slate-400 font-medium mr-1">기간 구분:</span>
+              {['ALL', 'ANNUAL', 'HALF', 'QUARTER'].map((p) => {
+                const labelMap = {
+                  ALL: '전체',
+                  ANNUAL: '연간 (FY)',
+                  HALF: '반기 (1H/2H)',
+                  QUARTER: '분기 (Q)'
+                };
+                return (
+                  <button
+                    key={p}
+                    className={`period-btn ${periodType === p ? 'active' : ''}`}
+                    onClick={() => setPeriodType(p)}
+                    id={`period-btn-${p.toLowerCase()}`}
+                  >
+                    {labelMap[p]}
+                  </button>
+                );
+              })}
+            </div>
+          )}
+        </div>
+      )}
     </header>
   );
 }
-
