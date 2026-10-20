@@ -1,0 +1,7 @@
+{
+  "version": "v9",
+  "branch": "version/v9",
+  "environment": "preview",
+  "basedOnVersion": "v8",
+  "baseCommit": "1fcb3959b14f368543c80e1a458561ed72fc0be1"
+}
